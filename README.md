@@ -28,7 +28,6 @@ The term `headless` refers to a configuration in which the GPU does not send dis
 Dynamic Kernel Module Support (DKMS) is a program/framework that enables generating Linux kernel modules whose sources generally reside outside the kernel source tree. The concept is to have DKMS modules automatically rebuilt when a new kernel is installed.
 
 
-
 ## Design test-1
 
 The host is a vm Ubuntu 20.04
@@ -36,7 +35,9 @@ The host is a vm Ubuntu 20.04
 ![gpu-abcdesktop-desing-test-1](gpu-abcdesktop-infra.svg)
 
 
-## Install 
+
+
+## Install
 
 ### Install kubernetes 
 
@@ -48,6 +49,16 @@ https://docs.nvidia.com/datacenter/cloud-native/kubernetes/install-k8s.html
 ### Install NVIDIA Device Plugin
 
 https://docs.nvidia.com/datacenter/cloud-native/gpu-operator/getting-started.html
+
+
+## NVIDIA package description
+
+| Package name               | Description | 
+|----------------------------|-------------|
+| nvidia-driver-xxx          | The full driver package, kernel driver, 2D/3D xorg driver, cuda driver, utilities|
+| nvidia-headless-xxx        | only kernel driver, cuda driver, utilities for compute servers without desktop|
+| nvidia-headless-no-dkms-xxx| same as -headless but without dkms dependency so the kernel modules won’t be compiled automatically|
+
 
 
 
