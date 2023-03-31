@@ -36,12 +36,22 @@ The host is a vm Ubuntu 20.04
 ![gpu-abcdesktop-desing-test-1](gpu-abcdesktop-infra.svg)
 
 
-##
+## Install 
 
-enable nvidia gpu device to X.org 
+### Install kubernetes 
+
+https://docs.nvidia.com/datacenter/cloud-native/kubernetes/install-k8s.html
+
+- Option 2: Installing Kubernetes Using Kubeadm
+- Choose containerd
+
+### Install NVIDIA Device Plugin
+
+https://docs.nvidia.com/datacenter/cloud-native/gpu-operator/getting-started.html
 
 
-### Run command `nvidia-container-cli`
+
+## Check the result of command `nvidia-container-cli`
 
 
 ```
@@ -61,11 +71,6 @@ Bus Location:   00000000:0b:00.0
 Architecture:   6.1
 ```
 
-### Look for driver
-
-```
-apt-cache search nvidia-driver |grep server
-```
 
 ### Run application in host 
 
