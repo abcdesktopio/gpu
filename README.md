@@ -33,6 +33,8 @@ Dynamic Kernel Module Support (DKMS) is a program/framework that enables generat
 
 The host is a vm Ubuntu 20.04
 
+![gpu-abcdesktop-desing-test-1](gpu-abcdesktop-infra.svg)
+
 
 ##
 
