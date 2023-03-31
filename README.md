@@ -10,10 +10,15 @@ Run application like with nvidia support inside a container
 - others 3D applications
 
 
+#### what is Headless ?
+
+The term `headless` refers to a configuration in which the GPU does not send display information to a display monitor
+
 
 ## Issues
 
 - Start more than one graphical container into the host 
+- Read 
 https://forums.developer.nvidia.com/t/nvidia-gpu-0-failed-to-acquire-modesetting-permission/213267/4
 
 
@@ -49,14 +54,9 @@ Architecture:   6.1
 
 ### Look for driver
 
-#### what is headless ?
-
-The term `headless` refers to a configuration in which the GPU does not send display information to a display monitor
-
 ```
 apt-cache search nvidia-driver |grep server
 ```
-
 
 ### Run application in host 
 
