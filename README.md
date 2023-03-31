@@ -1,6 +1,6 @@
 ## Description
 
-This document is a craftwork to enable and share nvidia devices in kubernetes container 
+This document is a craftpad to enable and share nvidia devices in kubernetes container 
 
 ## Goal
 
@@ -9,9 +9,11 @@ Run application like with nvidia support inside a container
 - chimestrax
 - others 3D applications
 
-Start more than one graphical container into the host 
-It seems to works
 
+
+## Issues
+
+- Start more than one graphical container into the host 
 https://forums.developer.nvidia.com/t/nvidia-gpu-0-failed-to-acquire-modesetting-permission/213267/4
 
 
