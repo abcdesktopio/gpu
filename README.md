@@ -35,9 +35,25 @@ The host is a vm Ubuntu 20.04
 ![gpu-abcdesktop-desing-test-1](gpu-abcdesktop-infra.svg)
 
 
-## Install
+### Install
 
-### TEST: Start more than on Xorg server and use nvidia-smi 
+
+#### Install NVIDIA Device Plugin
+
+https://docs.nvidia.com/datacenter/cloud-native/gpu-operator/getting-started.html
+
+
+##### NVIDIA package description
+
+| Package name               | Description | 
+|----------------------------|-------------|
+| nvidia-driver-xxx          | The full driver package, kernel driver, 2D/3D xorg driver, cuda driver, utilities|
+| nvidia-headless-xxx        | only kernel driver, cuda driver, utilities for compute servers without desktop|
+| nvidia-headless-no-dkms-xxx| same as -headless but without dkms dependency so the kernel modules won’t be compiled automatically|
+
+
+
+#### simple test on host: Start more than one Xorg server and use nvidia-smi 
 
 Start Xorg server on DISPLAY from 0 to 4
 
@@ -88,30 +104,29 @@ Sat Apr  1 07:37:02 2023
 > But NVIDIA driver is not aware of the PID namespace and nvidia-smi has no capability to map global pid to virtual pid.
 
 
-### Install kubernetes 
+#### Install kubernetes 
 
 https://docs.nvidia.com/datacenter/cloud-native/kubernetes/install-k8s.html
 
 - Option 2: Installing Kubernetes Using Kubeadm
 - Choose containerd
+- You must have the same command result at the end of the setup guide
 
-### Install NVIDIA Device Plugin
-
-https://docs.nvidia.com/datacenter/cloud-native/gpu-operator/getting-started.html
-
-
-## NVIDIA package description
-
-| Package name               | Description | 
-|----------------------------|-------------|
-| nvidia-driver-xxx          | The full driver package, kernel driver, 2D/3D xorg driver, cuda driver, utilities|
-| nvidia-headless-xxx        | only kernel driver, cuda driver, utilities for compute servers without desktop|
-| nvidia-headless-no-dkms-xxx| same as -headless but without dkms dependency so the kernel modules won’t be compiled automatically|
+``` bash
+kubectl logs gpu-operator-test
+[Vector addition of 50000 elements]
+Copy input data from the host memory to the CUDA device
+CUDA kernel launch with 196 blocks of 256 threads
+Copy output data from the CUDA device to the host memory
+Test PASSED
+Done
+```
 
 
 
 
-## Check the result of command `nvidia-container-cli`
+
+#### Check the result of command `nvidia-container-cli`
 
 
 ```
@@ -132,6 +147,6 @@ Architecture:   6.1
 ```
 
 
-### Run application in host 
+#### Run application in host 
 
-### Run application in container
+#### Run application in container
