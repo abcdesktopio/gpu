@@ -84,7 +84,8 @@ Sat Apr  1 07:37:02 2023
 +---------------------------------------------------------------------------------------+
 ```
 
-> All XOrg process are shring the SAME PID namespace and nvidia-smi has capability to list process.
+> All Xorg process are sharing the SAME PID namespace and nvidia-smi has capability to list procs.
+> But NVIDIA driver is not aware of the PID namespace and nvidia-smi has no capability to map global pid to virtual pid.
 
 
 ### Install kubernetes 
