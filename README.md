@@ -35,9 +35,57 @@ The host is a vm Ubuntu 20.04
 ![gpu-abcdesktop-desing-test-1](gpu-abcdesktop-infra.svg)
 
 
-
-
 ## Install
+
+### TEST: Start more than on Xorg server and use nvidia-smi 
+
+Start Xorg server on DISPLAY from 0 to 4
+
+```
+Xorg :0 &
+Xorg :1 &
+Xorg :2 &
+Xorg :3 &
+Xorg :4 &
+```
+
+We should have five Xorg processes
+
+```
+nvidia-smi
+```
+
+Command result
+
+```
+Sat Apr  1 07:37:02 2023      
++---------------------------------------------------------------------------------------+
+| NVIDIA-SMI 530.30.02              Driver Version: 530.30.02    CUDA Version: 12.1     |
+|-----------------------------------------+----------------------+----------------------+
+| GPU  Name                  Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp  Perf            Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+|                                         |                      |               MIG M. |
+|=========================================+======================+======================|
+|   0  NVIDIA GeForce GTX 1070         On | 00000000:0B:00.0 Off |                  N/A |
+|  0%   31C    P8                8W / 180W|     39MiB /  8192MiB |      0%      Default |
+|                                         |                      |                  N/A |
++-----------------------------------------+----------------------+----------------------+
+                                                                                         
++---------------------------------------------------------------------------------------+
+| Processes:                                                                            |
+|  GPU   GI   CI        PID   Type   Process name                            GPU Memory |
+|        ID   ID                                                             Usage      |
+|=======================================================================================|
+|    0   N/A  N/A   1137144      G   /usr/lib/xorg/Xorg                            5MiB |
+|    0   N/A  N/A   1138330      G   /usr/lib/xorg/Xorg                            5MiB |
+|    0   N/A  N/A   1138664      G   /usr/lib/xorg/Xorg                            5MiB |
+|    0   N/A  N/A   1138670      G   /usr/lib/xorg/Xorg                            5MiB |
+|    0   N/A  N/A   1138676      G   /usr/lib/xorg/Xorg                            5MiB |
++---------------------------------------------------------------------------------------+
+```
+
+> All XOrg process are shring the SAME PID namespace and nvidia-smi has capability to list process.
+
 
 ### Install kubernetes 
 
