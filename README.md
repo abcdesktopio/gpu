@@ -152,6 +152,12 @@ Architecture:   6.1
 
 ##### On you kubernetes infra 
 
+Clone the repo
+
+```
+git clone https://github.com/abcdesktopio/gpu.git
+```
+
 Create the `xgl0` sample pod
 
 ```
