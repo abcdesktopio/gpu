@@ -225,11 +225,11 @@ The default passwd is `mypasswd` for VNC and for the user.
 
 VNC Login 
 
-![vnc-login-xgl-0](vnc-login-xgl-0.svg)
+![vnc-login-xgl-0](vnc-login-xgl-0.png)
 
 User Login 
 
-![user-login-xgl-0](user-login-xgl-0.svg)
+![user-login-xgl-0](user-login-xgl-0.png)
 
 
 
@@ -276,3 +276,7 @@ Sun Apr  2 17:21:47 2023
 |    0   N/A  N/A    576318      G   glxgears                                      3MiB |
 +---------------------------------------------------------------------------------------+
 ```
+
+Screenshot running 3 vncviewer and the nvidia-smi command result  
+
+![vnc-nvidia-pods](vnc-nvidia-pods.png)
