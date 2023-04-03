@@ -52,6 +52,7 @@ https://docs.nvidia.com/datacenter/cloud-native/gpu-operator/getting-started.htm
 | nvidia-headless-no-dkms-xxx| same as -headless but without dkms dependency so the kernel modules won’t be compiled automatically|
 
 
+# Run application in host 
 
 #### simple test on host: Start more than one Xorg server and use nvidia-smi 
 
@@ -147,6 +148,42 @@ Architecture:   6.1
 ```
 
 
-#### Run application in host 
+#### Run application in containers
 
-#### Run application in container
+```
+# nvidia-smi 
+Sun Apr  2 17:21:47 2023       
++---------------------------------------------------------------------------------------+
+| NVIDIA-SMI 530.30.02              Driver Version: 530.30.02    CUDA Version: 12.1     |
+|-----------------------------------------+----------------------+----------------------+
+| GPU  Name                  Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp  Perf            Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+|                                         |                      |               MIG M. |
+|=========================================+======================+======================|
+|   0  NVIDIA GeForce GTX 1070         On | 00000000:0B:00.0 Off |                  N/A |
+| 20%   50C    P0               55W / 180W|    182MiB /  8192MiB |     85%      Default |
+|                                         |                      |                  N/A |
++-----------------------------------------+----------------------+----------------------+
+                                                                                         
++---------------------------------------------------------------------------------------+
+| Processes:                                                                            |
+|  GPU   GI   CI        PID   Type   Process name                            GPU Memory |
+|        ID   ID                                                             Usage      |
+|=======================================================================================|
+|    0   N/A  N/A    561374      G   /usr/lib/xorg/Xorg                           40MiB |
+|    0   N/A  N/A    561524      G   /usr/bin/kwin_x11                             2MiB |
+|    0   N/A  N/A    561575      G   /usr/bin/plasmashell                          3MiB |
+|    0   N/A  N/A    562401      G   /usr/lib/xorg/Xorg                           42MiB |
+|    0   N/A  N/A    562608      G   /usr/lib/xorg/Xorg                           38MiB |
+|    0   N/A  N/A    562619      G   /usr/bin/kwin_x11                             3MiB |
+|    0   N/A  N/A    562636      G   /usr/bin/plasmashell                          3MiB |
+|    0   N/A  N/A    562895      G   /usr/bin/kwin_x11                             3MiB |
+|    0   N/A  N/A    562954      G   /usr/bin/plasmashell                          3MiB |
+|    0   N/A  N/A    565723      G   /usr/lib/firefox/firefox                     26MiB |
+|    0   N/A  N/A    569880      G   glxgears                                      3MiB |
+|    0   N/A  N/A    574570      G   glxgears                                      3MiB |
+|    0   N/A  N/A    574753      G   nvidia-settings                               0MiB |
+|    0   N/A  N/A    575036      G   nvidia-settings                               0MiB |
+|    0   N/A  N/A    576318      G   glxgears                                      3MiB |
++---------------------------------------------------------------------------------------+
+```
