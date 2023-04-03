@@ -150,6 +150,95 @@ Architecture:   6.1
 
 #### Run application in containers
 
+##### On you kubernetes infra 
+
+Create the `xgl0` sample pod
+
+```
+kubectl apply -f xgl-0.yml
+deployment.apps/xgl0 created
+```
+
+Get the pod 
+
+```
+kubectl get pods 
+NAME                    READY   STATUS    RESTARTS   AGE
+xgl0-7d56d86f5d-kb7jn   1/1     Running   0          7s
+```
+
+
+Forward local TCP port 5900 to container TCP port 5900
+
+```
+kubectl port-forward xgl0-7d56d86f5d-kb7jn --address 0.0.0.0 5900:5900 &
+Forwarding from 0.0.0.0:5900 -> 5900
+```
+
+Start xterm application inside the `xgl0` pod
+
+```
+kubectl exec -it xgl0-7d56d86f5d-kb7jn -- bash
+user@xgl0:~$ nohup gnome-terminal &
+[1] 467
+user@xgl0:~$ nohup: ignoring input and appending output to 'nohup.out'
+user@xgl0:~$ 
+```
+
+On the node with the nvidia gpu, run nvidia-smi command, to check that the processes `/usr/lib/xorg/Xorg` `/usr/bin/kwin_x11` `/usr/bin/plasmashell` are running. 
+
+```
+# nvidia-smi 
+Mon Apr  3 09:59:09 2023       
++---------------------------------------------------------------------------------------+
+| NVIDIA-SMI 530.30.02              Driver Version: 530.30.02    CUDA Version: 12.1     |
+|-----------------------------------------+----------------------+----------------------+
+| GPU  Name                  Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp  Perf            Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+|                                         |                      |               MIG M. |
+|=========================================+======================+======================|
+|   0  NVIDIA GeForce GTX 1070         On | 00000000:0B:00.0 Off |                  N/A |
+|  0%   36C    P8                9W / 180W|     38MiB /  8192MiB |     17%      Default |
+|                                         |                      |                  N/A |
++-----------------------------------------+----------------------+----------------------+
+                                                                                         
++---------------------------------------------------------------------------------------+
+| Processes:                                                                            |
+|  GPU   GI   CI        PID   Type   Process name                            GPU Memory |
+|        ID   ID                                                             Usage      |
+|=======================================================================================|
+|    0   N/A  N/A    951316      G   /usr/lib/xorg/Xorg                           28MiB |
+|    0   N/A  N/A    951454      G   /usr/bin/kwin_x11                             3MiB |
+|    0   N/A  N/A    951520      G   /usr/bin/plasmashell                          3MiB |
++---------------------------------------------------------------------------------------+
+```
+
+
+
+
+
+##### On the user desktop
+
+Using VNC client, connect to the host running the `kubectl port-forward`.
+
+The default passwd is `mypasswd` for VNC and for the user.
+
+VNC Login 
+
+![vnc-login-xgl-0](vnc-login-xgl-0.svg)
+
+User Login 
+
+![user-login-xgl-0](user-login-xgl-0.svg)
+
+
+
+
+
+
+#### Repeat the same process for `xgl1` and `xgl2` 
+
+
 ```
 # nvidia-smi 
 Sun Apr  2 17:21:47 2023       
