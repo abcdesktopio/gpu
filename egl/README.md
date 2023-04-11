@@ -19,6 +19,7 @@ contains an fake X11 server(Xvfb) and all other neccessary dependencies. It can 
 
 
 ###The VirtualGL EGL backend
+
 VirtualGL faker supports EGL backend. (apps are tested with VGL v3.1) It eliminates the need for a 3D X server but still requires a 2D server.
 Xvfb inside the application docker act as a headless 2D X server. Basically to start an application the following steps occur
 - launch Xvfb
