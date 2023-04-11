@@ -27,7 +27,7 @@ Xvfb inside the application docker act as a headless 2D X server. Basically to s
 - export VGL_DISPLAY
 - vglrun APPLICATION
 
-VGL_DISPLAY in the Dockerfile needs to be set to 'egl'. This is the EGL device ID which identify a GPU. For multi-gpus, it can be spicified as egl0, egl1 etc..
+VGL_DISPLAY in the Dockerfile needs to be set to 'egl'. This is the EGL device ID which identify a GPU. For multi-gpus, it can be specified as egl0, egl1 etc..
 
 
 ### In the Dockerfile
