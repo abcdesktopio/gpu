@@ -8,6 +8,8 @@ ARG DEBIAN_FRONTEND=noninteractive
 ENV NVIDIA_DRIVER_CAPABILITIES all
 ENV LD_LIBRARY_PATH /usr/local/nvidia/lib:/usr/local/nvidia/lib64:/usr/lib/x86_64-linux-gnu
 ENV VGL_DISPLAY egl
+#uncomment this if run ChimeraX as pod_application
+#ENV VGL_COMPRESS proxy
 
 # Install locales 
 RUN apt-get clean && \
@@ -91,6 +93,9 @@ LABEL oc.desktopfile="org.kde.konsole.desktop"
 LABEL oc.launch="ChimeraX.ChimeraX"
 LABEL oc.template="abcdesktopio/oc.template.ubuntu.nvidia.22.04"
 ENV ARGS="--hold -e vglrun /usr/bin/chimerax"
+# If ChimeraX runs as pod_application but the VGL_COMPRESS var is not set, pass -c proxy to the vglrun command above
+#ENV ARGS="--hold -e vglrun -c proxy /usr/bin/chimerax"
+
 LABEL oc.name="chimeraX"
 LABEL oc.displayname="ChimeraX"
 LABEL oc.path="/usr/bin/konsole"
@@ -98,10 +103,15 @@ LABEL oc.type=app
 LABEL oc.showinview="dock"
 LABEL oc.rules="{\"homedir\":{\"default\":true}}"
 LABEL oc.acl="{\"permit\":[\"all\"]}"
+#uncomment below if run chimerax as pod_application
+LABEL oc.containerengine="pod_application"
+
 RUN for d in /usr/share/icons /usr/share/pixmaps ; do echo "testing link in $d"; if [ -d $d ] && [ -x /composer/safelinks.sh ] ; then echo "fixing link in $d"; cd $d ; /composer/safelinks.sh ; fi; done
 ENV APPNAME "ChimeraX"
 ENV APPBIN "/usr/bin/konsole"
 LABEL oc.args="--hold -e vglrun /usr/bin/chimerax"
+# If ChimeraX runs as pod_application but the VGL_COMPRESS var is not set, pass -c proxy to the vglrun command above
+#LABEL oc.args="--hold -e vglrun -c proxy /usr/bin/chimerax"
 ENV APP "/usr/bin/konsole"
 
 RUN mkdir -p /run/user
