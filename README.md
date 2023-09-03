@@ -40,6 +40,11 @@ The host is a vm Ubuntu 20.04
 
 #### Install NVIDIA Device Plugin
 
+- To do install nvidia device
+
+https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html
+
+- For information only
 https://docs.nvidia.com/datacenter/cloud-native/gpu-operator/getting-started.html
 
 
