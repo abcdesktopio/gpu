@@ -40,9 +40,12 @@ The host is a vm Ubuntu 20.04
 
 #### Install NVIDIA Device Plugin
 
-- To do install nvidia device
+- To do first install nvidia device
+https://docs.nvidia.com/datacenter/tesla/tesla-installation-notes/index.html
 
+- Then install runtime container
 https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html
+
 
 - For information only
 https://docs.nvidia.com/datacenter/cloud-native/gpu-operator/getting-started.html
