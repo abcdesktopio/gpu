@@ -41,6 +41,13 @@ The host is a vm Ubuntu 20.04
 
 #### Install NVIDIA Device Plugin
 
+
+- Install packages
+
+```
+apt-get install libglvnd0 libglvnd-dev pkg-config build-essential
+```
+
 - To do first install nvidia device
 https://www.nvidia.com/download/index.aspx
 
