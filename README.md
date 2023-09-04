@@ -48,8 +48,61 @@ The host is a vm Ubuntu 20.04
 apt-get install libglvnd0 libglvnd-dev pkg-config build-essential
 ```
 
-- To do first install nvidia device
+- To do first download and install the driver for your nvidia device
 https://www.nvidia.com/download/index.aspx
+
+Run the NVIDIA Accelerated Graphics Driver install process
+
+For example 
+
+```
+./NVIDIA-Linux-x86_64-535.104.05.run 
+Verifying archive integrity... OK
+Uncompressing NVIDIA Accelerated Graphics Driver for Linux-x86_64 535.104.05........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+```
+
+You can run `nvidia-smi` command line
+
+```
+nvidia-smi
+```
+
+```
+Mon Sep  4 16:08:47 2023       
++---------------------------------------------------------------------------------------+
+| NVIDIA-SMI 535.104.05             Driver Version: 535.104.05   CUDA Version: 12.2     |
+|-----------------------------------------+----------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |         Memory-Usage | GPU-Util  Compute M. |
+|                                         |                      |               MIG M. |
+|=========================================+======================+======================|
+|   0  Quadro M620                    Off | 00000000:01:00.0 Off |                  N/A |
+| N/A   54C    P0              N/A / 200W |      0MiB /  2048MiB |      1%      Default |
+|                                         |                      |                  N/A |
++-----------------------------------------+----------------------+----------------------+
+                                                                                         
++---------------------------------------------------------------------------------------+
+| Processes:                                                                            |
+|  GPU   GI   CI        PID   Type   Process name                            GPU Memory |
+|        ID   ID                                                             Usage      |
+|=======================================================================================|
+|  No running processes found                                                           |
++---------------------------------------------------------------------------------------+
+```
+
+-- Install  nvidia-container-toolkit-base 
+
+Add nvidia-docker in repo
+
+```
+wget https://nvidia.github.io/nvidia-docker/gpgkey --no-check-certificate
+apt-key add gpgkey
+distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
+curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list | sudo tee /etc/apt/sources.list.d/nvidia-docker.list
+sudo apt-get update && sudo apt-get install -y nvidia-container-toolkit-base
+```
+
+
 
 - Install CUDA
 https://docs.nvidia.com/datacenter/tesla/tesla-installation-notes/index.html
