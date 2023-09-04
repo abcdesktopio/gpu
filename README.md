@@ -38,9 +38,13 @@ The host is a vm Ubuntu 20.04
 ### Install
 
 
+
 #### Install NVIDIA Device Plugin
 
 - To do first install nvidia device
+https://www.nvidia.com/download/index.aspx
+
+- Install CUDA
 https://docs.nvidia.com/datacenter/tesla/tesla-installation-notes/index.html
 
 - Then install runtime container
