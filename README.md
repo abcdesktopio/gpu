@@ -42,33 +42,52 @@ The host is a vm Ubuntu 20.04
 #### Install NVIDIA Device Plugin
 
 
-- Install packages
+##### Blacklist nouveau 
 
 ```
-apt-get install libglvnd0 libglvnd-dev pkg-config build-essential
+echo blacklist nouveau > /etc/modprobe.d/blacklist-nvidia-nouveau.conf
+echo options nouveau modeset=0 >> /etc/modprobe.d/blacklist-nvidia-nouveau.conf
 ```
 
-- To do first download and install the driver for your nvidia device
-https://www.nvidia.com/download/index.aspx
-
-Run the NVIDIA Accelerated Graphics Driver install process
-
-For example 
-
+- Reboot after update-initramfs 
 ```
-./NVIDIA-Linux-x86_64-535.104.05.run 
-Verifying archive integrity... OK
-Uncompressing NVIDIA Accelerated Graphics Driver for Linux-x86_64 535.104.05........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+update-initramfs -u
+reboot
 ```
 
-You can run `nvidia-smi` command line
+##### Install  nvidia-container-toolkit-base 
+
+Add nvidia-docker in repo
+
+```
+wget https://nvidia.github.io/nvidia-docker/gpgkey --no-check-certificate
+apt-key add gpgkey
+distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
+curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list | sudo tee /etc/apt/sources.list.d/nvidia-docker.list
+sudo apt-get update && sudo apt-get install -y nvidia-container-toolkit-base
+```
+
+##### Install `cuda` package
+
+
+Source https://developer.nvidia.com/cuda-downloads
+Source https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html
+
+```
+wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-keyring_1.1-1_all.deb
+dpkg -i cuda-keyring_1.1-1_all.deb
+apt-get update
+apt-get -y install cuda
+```
+
+- run `nvidia-smi` command
 
 ```
 nvidia-smi
 ```
 
 ```
-Mon Sep  4 16:08:47 2023       
+Thu Sep 14 11:46:00 2023 
 +---------------------------------------------------------------------------------------+
 | NVIDIA-SMI 535.104.05             Driver Version: 535.104.05   CUDA Version: 12.2     |
 |-----------------------------------------+----------------------+----------------------+
@@ -76,8 +95,8 @@ Mon Sep  4 16:08:47 2023
 | Fan  Temp   Perf          Pwr:Usage/Cap |         Memory-Usage | GPU-Util  Compute M. |
 |                                         |                      |               MIG M. |
 |=========================================+======================+======================|
-|   0  Quadro M620                    Off | 00000000:01:00.0 Off |                  N/A |
-| N/A   54C    P0              N/A / 200W |      0MiB /  2048MiB |      1%      Default |
+|   0  NVIDIA GeForce GTX 1070        Off | 00000000:03:00.0 Off |                  N/A |
+| 27%   32C    P0              35W / 180W |      0MiB /  8192MiB |      1%      Default |
 |                                         |                      |                  N/A |
 +-----------------------------------------+----------------------+----------------------+
                                                                                          
@@ -90,29 +109,81 @@ Mon Sep  4 16:08:47 2023
 +---------------------------------------------------------------------------------------+
 ```
 
--- Install  nvidia-container-toolkit-base 
-
-Add nvidia-docker in repo
+##### Install `containerd` and `kubernetes`
 
 ```
-wget https://nvidia.github.io/nvidia-docker/gpgkey --no-check-certificate
-apt-key add gpgkey
-distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
-curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list | sudo tee /etc/apt/sources.list.d/nvidia-docker.list
-sudo apt-get update && sudo apt-get install -y nvidia-container-toolkit-base
+git clone https://github.com/jfv-opensource/kube-tools.git
+cd kube-tools
+./km --apply
+```
+
+#####  install runtime container
+
+source https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html
+
+```
+curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg \
+  && curl -s -L https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list | \
+    sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' | \
+    sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list \
+  && sudo apt-get update
+```
+
+install nvidia-container-toolkit 
+
+```
+apt-get install -y nvidia-container-toolkit  
+```
+
+configure nvidia runtime in containerd
+
+```
+nvidia-ctk runtime configure --runtime=containerd
+INFO[0000] Loading config from /etc/containerd/config.toml 
+INFO[0000] Wrote updated config to /etc/containerd/config.toml 
+INFO[0000] It is recommended that containerd daemon be restarted.
+```
+
+```
+sed -i 's/^#root/root/' /etc/nvidia-container-runtime/config.toml
+```
+
+restart containerd
+
+```
+systemctl restart containerd
 ```
 
 
 
-- Install CUDA
-https://docs.nvidia.com/datacenter/tesla/tesla-installation-notes/index.html
+#### install helm
 
-- Then install runtime container
-https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html
+source https://docs.nvidia.com/datacenter/cloud-native/gpu-operator/getting-started.html
+
+```
+curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 \
+   && chmod 700 get_helm.sh \
+   && ./get_helm.sh
+```
+
+add the NVIDIA Helm repository:
+
+```
+helm repo add nvidia https://helm.ngc.nvidia.com/nvidia \
+   && helm repo update
+```
+
+#### install namespaces `gpu-operator` `nvidia/gpu-operator`
+
+source https://docs.nvidia.com/datacenter/cloud-native/gpu-operator/getting-started.html
+
+```
+helm install --wait --generate-name \
+     -n gpu-operator --create-namespace \
+     nvidia/gpu-operator
+```
 
 
-- For information only
-https://docs.nvidia.com/datacenter/cloud-native/gpu-operator/getting-started.html
 
 
 ##### NVIDIA package description
