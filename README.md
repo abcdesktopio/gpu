@@ -199,83 +199,40 @@ nvidia-device-plugin-daemonset-vvzzm                              1/1     Runnin
 nvidia-operator-validator-w4t2l                                   1/1     Running     0              110m
 ```
 
-#### run a pod test 
-
-
-
-
-##### NVIDIA package description
-
-| Package name               | Description | 
-|----------------------------|-------------|
-| nvidia-driver-xxx          | The full driver package, kernel driver, 2D/3D xorg driver, cuda driver, utilities|
-| nvidia-headless-xxx        | only kernel driver, cuda driver, utilities for compute servers without desktop|
-| nvidia-headless-no-dkms-xxx| same as -headless but without dkms dependency so the kernel modules won’t be compiled automatically|
-
-
-# Run application in host 
-
-#### simple test on host: Start more than one Xorg server and use nvidia-smi 
-
-Start Xorg server on DISPLAY from 0 to 4
+#### run CUDA VectorAdd pod test 
 
 ```
-Xorg :0 &
-Xorg :1 &
-Xorg :2 &
-Xorg :3 &
-Xorg :4 &
+cat << EOF | kubectl create -f -
+apiVersion: v1
+kind: Pod
+metadata:
+  name: cuda-vectoradd
+spec:
+  restartPolicy: OnFailure
+  containers:
+  - name: cuda-vectoradd
+    image: "nvidia/samples:vectoradd-cuda11.2.1"
+    resources:
+      limits:
+         nvidia.com/gpu: 1
+EOF
 ```
 
-We should have five Xorg processes
+return
 
 ```
-nvidia-smi
+pod/cuda-vectoradd created
 ```
 
-Command result
+read cuda-vectoradd stdout 
 
 ```
-Sat Apr  1 07:37:02 2023      
-+---------------------------------------------------------------------------------------+
-| NVIDIA-SMI 530.30.02              Driver Version: 530.30.02    CUDA Version: 12.1     |
-|-----------------------------------------+----------------------+----------------------+
-| GPU  Name                  Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
-| Fan  Temp  Perf            Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
-|                                         |                      |               MIG M. |
-|=========================================+======================+======================|
-|   0  NVIDIA GeForce GTX 1070         On | 00000000:0B:00.0 Off |                  N/A |
-|  0%   31C    P8                8W / 180W|     39MiB /  8192MiB |      0%      Default |
-|                                         |                      |                  N/A |
-+-----------------------------------------+----------------------+----------------------+
-                                                                                         
-+---------------------------------------------------------------------------------------+
-| Processes:                                                                            |
-|  GPU   GI   CI        PID   Type   Process name                            GPU Memory |
-|        ID   ID                                                             Usage      |
-|=======================================================================================|
-|    0   N/A  N/A   1137144      G   /usr/lib/xorg/Xorg                            5MiB |
-|    0   N/A  N/A   1138330      G   /usr/lib/xorg/Xorg                            5MiB |
-|    0   N/A  N/A   1138664      G   /usr/lib/xorg/Xorg                            5MiB |
-|    0   N/A  N/A   1138670      G   /usr/lib/xorg/Xorg                            5MiB |
-|    0   N/A  N/A   1138676      G   /usr/lib/xorg/Xorg                            5MiB |
-+---------------------------------------------------------------------------------------+
+kubectl logs cuda-vectoradd
 ```
 
-> All Xorg process are sharing the SAME PID namespace and nvidia-smi has capability to list procs.
-> But NVIDIA driver is not aware of the PID namespace and nvidia-smi has no capability to map global pid to virtual pid.
+You should get
 
-
-#### Install kubernetes 
-
-https://docs.nvidia.com/datacenter/cloud-native/kubernetes/install-k8s.html
-
-- Option 2: Installing Kubernetes Using Kubeadm
-- Choose containerd
-- You must have the same command result at the end of the setup guide
-
-``` bash
-kubectl logs gpu-operator-test
+```
 [Vector addition of 50000 elements]
 Copy input data from the host memory to the CUDA device
 CUDA kernel launch with 196 blocks of 256 threads
@@ -284,34 +241,7 @@ Test PASSED
 Done
 ```
 
-
-
-
-
-#### Check the result of command `nvidia-container-cli`
-
-
-```
-nvidia-container-cli --load-kmods info
-```
-
-```
-NVRM version:   525.105.17
-CUDA version:   12.0
-
-Device Index:   0
-Device Minor:   0
-Model:          NVIDIA GeForce GTX 1070
-Brand:          GeForce
-GPU UUID:       GPU-38ab400c-8953-69b1-5460-f70aefd40f8b
-Bus Location:   00000000:0b:00.0
-Architecture:   6.1
-```
-
-
-#### Run application in containers
-
-##### On you kubernetes infra 
+# Run application in containers
 
 Clone the repo
 
