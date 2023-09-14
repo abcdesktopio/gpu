@@ -37,10 +37,10 @@ The host is a vm Ubuntu 20.04
 
 ### Install
 
+Install on Ubuntu 22.04, quick and dirty guide
 
 
 #### Install NVIDIA Device Plugin
-
 
 ##### Blacklist nouveau 
 
@@ -182,6 +182,24 @@ helm install --wait --generate-name \
      -n gpu-operator --create-namespace \
      nvidia/gpu-operator
 ```
+
+Wait for pod Ready it can take a while
+
+```
+kubectl get pod -n gpu-operator 
+NAME                                                              READY   STATUS      RESTARTS       AGE
+gpu-feature-discovery-nn4mj                                       1/1     Running     0              110m
+gpu-operator-1694693852-node-feature-discovery-master-ccf8plvlt   1/1     Running     1 (104m ago)   110m
+gpu-operator-1694693852-node-feature-discovery-worker-x6rfw       1/1     Running     1 (104m ago)   110m
+gpu-operator-8c6c78df4-pb26s                                      1/1     Running     1 (104m ago)   110m
+nvidia-container-toolkit-daemonset-bqx6p                          1/1     Running     1 (104m ago)   110m
+nvidia-cuda-validator-q259n                                       0/1     Completed   0              104m
+nvidia-dcgm-exporter-fmp4f                                        1/1     Running     0              110m
+nvidia-device-plugin-daemonset-vvzzm                              1/1     Running     0              110m
+nvidia-operator-validator-w4t2l                                   1/1     Running     0              110m
+```
+
+#### run a pod test 
 
 
 
